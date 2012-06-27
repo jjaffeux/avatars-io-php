@@ -2,7 +2,7 @@
 
 namespace AvatarsIo;
 
-class Client extends Avatar {
+class Client {
 
 	const version = 'v1';
 	
@@ -17,7 +17,7 @@ class Client extends Avatar {
 	function post($content, $headers, $endpoint)
 	{
 		$request = $this->browser->post(
-			self::base_uri . '/'. self::version . '/' . $endpoint,
+			Avatar::base_uri . '/'. self::version . '/' . $endpoint,
 				$headers, 
 				json_encode($content)
 			);
