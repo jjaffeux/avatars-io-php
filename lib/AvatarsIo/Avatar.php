@@ -9,9 +9,6 @@ class Avatar {
 
 	const base_uri = 'http://avatars.io';
 
-	protected $response;
-	protected $file;
-	protected $identifier;
 	protected $client_id = FALSE;
 	protected $access_token = FALSE;
 	protected $client;
@@ -19,8 +16,8 @@ class Avatar {
 	function __construct($client_id, $access_token)
 	{
 		if ( ! $client_id OR ! $access_token) {
-            throw new Undefined_credentials();
-        }
+      throw new Undefined_credentials();
+    }
 
 		$this->client_id = $client_id;
 		$this->access_token = $access_token;
@@ -30,30 +27,27 @@ class Avatar {
 	function upload($file, $identifier = '')
 	{
 		if ( ! file_exists($file) OR ! is_readable($file)) {
-            throw new Cant_access_file();
-        }
+      throw new Cant_access_file();
+    }
 
-		$this->file = $file;
-		$this->identifier = $identifier;
+		$response = $this->send_file($file, $identifier);
 
-		$this->send_file();
-		
-		if(empty($this->response->data->upload_info)) {
-			return $this->response->data->url;
+		if(empty($response->data->upload_info)) {
+			return $response->data->url;
 		}
  
-		$this->set_aws_acl();
-		$this->get_file_path();
+		$this->set_aws_s3_acl($response->data->upload_info, $file);
+		return $this->get_file_url($response->data->id);
 	}
 
-	public function send_file()
+	function send_file($file, $identifier)
 	{
 		$content = array(
 			'data' => array(
-				'filename' => $this->file,
-				'md5' => md5_file($this->file),
-				'size' => filesize($this->file),
-				'path' => $this->identifier
+				'filename' => $file,
+				'md5' => md5_file($file),
+				'size' => filesize($file),
+				'path' => $identifier
 			)
 		);
 
@@ -68,21 +62,21 @@ class Avatar {
 		);
 	}
 	
-	public function set_aws_acl()
+  function set_aws_s3_acl($upload_info, $file)
 	{
 		$this->client->put(
-			$this->response->data->upload_info,
+			$upload_info,
 			array(
-				'Authorization: ' . $this->response->data->upload_info->signature,
-				'Date: ' . $this->response->data->upload_info->date,
-				'Content-Type: ' . $this->response->data->upload_info->content_type,
+				'Authorization: ' . $upload_info->signature,
+				'Date: ' . $upload_info->date,
+				'Content-Type: ' . $upload_info->content_type,
 				'x-amz-acl: public-read'
 			),
-			$this->file
+			$file
 		);
 	}
 	
-	public function get_file_path()
+	function get_file_url($image_id)
 	{
 		$response = $this->client->post(
 			'',
@@ -90,7 +84,7 @@ class Avatar {
 				'x-client_id: ' . $this->client_id,
 				'Authorization: OAuth ' . $this->access_token
 			),
-			'token/' . $this->response->data->id . '/complete'
+			'token/' . $image_id . '/complete'
 		);
 
 		return $response->data;
