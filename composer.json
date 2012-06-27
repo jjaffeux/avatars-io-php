@@ -1,0 +1,25 @@
+{
+    "name": "jjaffeux/avatars-io-php",
+    "type": "library",
+    "description": "AvatarIo api wrapper",
+    "version": "1.0.0",
+    "homepage": "https://github.com/jjaffeux/avatars-io-php",
+    "keywords": ["avatars io", "avatars", "api", "facebook", "twitter", "instagram"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Joffrey Jaffeux",
+            "email": "j.jaffeux@gmail.com",
+            "homepage": "http://www.twitter.com/joffreyjaffeux"
+        }
+    ],
+    "require": {
+        "php": ">=5.2",
+		"kriswallsmith/buzz": "v0.7"
+    },
+    "autoload": {
+        "psr-0": {
+			"AvatarsIo": "lib/"
+		}
+    }
+}
