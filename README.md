@@ -17,7 +17,7 @@ composer.json :
 }
 ```
 ``` php
-$avatar = new \AvatardsIo\Avatar(CLIENT ID, SECRET KEY);
+$avatar = new \AvatarsIo\Avatar(CLIENT ID, SECRET KEY);
 ``` 
 
 General Usage
