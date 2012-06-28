@@ -3,7 +3,7 @@ AVATARS IO PHP
 
 THIS IS A VERY EARLY STAGE WRAPPER FOR AVATARS.IO. However, the API will remain stable you can use it and nothing will break in the future.
 
-Won't work on it before next week, the current version is only a fast code to learn the avatars.io API, coming next :
+Won't work on it before next week, the current version is only a fast code to learn the avatars.io API, however it works, coming next :
 - tests
 - injectable httpclient
 - more features (better handling of url generation for example)
